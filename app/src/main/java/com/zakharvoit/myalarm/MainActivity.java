@@ -14,24 +14,24 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     private Button mStartTrackingButton;
     private ListView mListOfLocations;
-    private List<String> mLocations = new ArrayList<>();
+    private ArrayList<String> mLocations = new ArrayList<>();
     private ArrayAdapter<String> mLocationsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mLocations = savedInstanceState.getStringArrayList("Locations");
+        }
+
         setContentView(R.layout.activity_main);
 
         checkLocationAllowed();
@@ -73,10 +73,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Location location = intent.getParcelableExtra("Location");
-        mLocationsAdapter.add(
-                String.format("lat: %.6f lon: %.6f time: %s",
-                        location.getLatitude(),
-                        location.getLongitude(),
-                        SimpleDateFormat.getTimeInstance().format(new Date(location.getTime()))));
+        mLocationsAdapter.add(AlarmReceiver.locationToString(location));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putStringArrayList("Locations", mLocations);
     }
 }
