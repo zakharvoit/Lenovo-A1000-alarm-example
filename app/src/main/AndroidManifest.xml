@@ -24,6 +24,8 @@
         <receiver android:name=".AlarmReceiver"
             android:process=":remote"
             />
+        <service android:name=".LocationTrackingService"
+            />
     </application>
 
 </manifest>

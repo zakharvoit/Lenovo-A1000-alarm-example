@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(context, "Tracking started", Toast.LENGTH_SHORT).show();
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         filter.setPriority(1000);
-        context.registerReceiver(new AlarmReceiver(context), filter);
+        context.registerReceiver(new AlarmReceiver(), filter);
     }
 
     void checkLocationAllowed() {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Location location = intent.getParcelableExtra("Location");
-        mLocationsAdapter.add(AlarmReceiver.locationToString(location));
+        mLocationsAdapter.add(LocationTrackingService.locationToString(location));
     }
 
     @Override
